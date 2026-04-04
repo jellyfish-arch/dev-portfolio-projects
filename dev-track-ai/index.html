@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevTrack AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <h1>DEV<span>TRACK</span> AI</h1>
+        <p class="tagline">Developer Growth Intelligence System</p>
+        <div class="theme-row">
+            <button id="themeToggle" type="button" class="theme-toggle" aria-label="Toggle dark mode">🌙 Dark</button>
+        </div>
+    </header>
+
+    <!-- INPUT SECTION -->
+    <div class="card">
+        <h2><span class="tag">[01]</span> Input</h2>
+
+        <!-- Mode tabs -->
+        <div class="mode-tabs">
+            <button class="tab-btn active" id="tabGithub" onclick="switchTab('github')">🐙 GitHub</button>
+            <button class="tab-btn" id="tabManual" onclick="switchTab('manual')">✏️ Manual</button>
+        </div>
+
+        <!-- GitHub tab -->
+        <div id="githubTab">
+            <div class="input-group">
+                <label>GitHub Username</label>
+                <input type="text" id="github" placeholder="e.g. torvalds" autocomplete="off">
+                <small>Enter only username, not full URL — press Enter to analyze</small>
+            </div>
+            <button class="full-btn" onclick="githubAnalyze()">🐙 Analyze GitHub</button>
+        </div>
+
+        <!-- Manual tab -->
+        <div id="manualTab" style="display:none;">
+            <div class="input-group">
+                <label>Number of Projects</label>
+                <input type="number" id="projects" placeholder="e.g. 5" min="0">
+            </div>
+            <div class="input-group">
+                <label>DSA Level</label>
+                <select id="dsa">
+                    <option value="">Select DSA Level</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Languages <span class="label-hint">(comma separated)</span></label>
+                <input type="text" id="languages" placeholder="Python, Java, C++ ...">
+            </div>
+            <button class="full-btn" onclick="manualAnalyze()">⚡ Manual Analyze</button>
+        </div>
+    </div>
+
+    <!-- RESULT SECTION -->
+    <div class="card" id="resultSection" style="display:none;">
+        <div class="result-header">
+            <h2><span class="tag">[02]</span> Analysis</h2>
+            <button class="icon-btn" id="copyBtn" onclick="copyResult()" title="Copy result">📋 Copy</button>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <!-- AI SECTION -->
+    <div class="card" id="aiSection" style="display:none;">
+        <h2><span class="tag">[03]</span> AI Insights <span class="model-badge">gemma2:8b</span></h2>
+        <button id="aiBtn" onclick="getAIInsights()">🤖 Generate AI Insights</button>
+        <div id="aiResult"></div>
+    </div>
+
+    <!-- HISTORY SECTION -->
+    <div class="card" id="historySection" style="display:none;">
+        <div class="result-header">
+            <h2><span class="tag">[04]</span> Score History</h2>
+            <button class="icon-btn danger" onclick="clearHistory()">🗑️ Clear</button>
+        </div>
+        <div id="historyContent"></div>
+    </div>
+
+    <div class="card">
+        <h2><span class="tag">[05]</span> Career Path</h2>
+
+        <div class="input-group">
+            <label>Select Your Goal</label>
+            <select id="careerGoal">
+                <option value="">Choose a path</option>
+                <option value="web">Web Developer</option>
+                <option value="ai">AI / ML Engineer</option>
+                <option value="backend">Backend Developer</option>
+            </select>
+        </div>
+
+        <button class="full-btn" onclick="generatePath()">🚀 Generate Roadmap</button>
+
+        <div id="careerResult" style="margin-top:15px;"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
