@@ -12,10 +12,10 @@ A beginner experiment exploring how different programming languages solve simple
 
 ## 💡 What I Learned
 
-- Python is clean and great for quick logic
-- Java is structured and strict
-- JavaScript runs directly in the browser
-- Same problem, different syntax — but same logic!
+- Python is clean and great for quick logic.
+- Java is structured and strict.
+- JavaScript runs directly in the browser.
+- Same problem, different syntax — but same logic!.
 
 ## 👨‍💻 Author
 
