@@ -21,7 +21,7 @@ This project combines:
 - scoring logic
 - visual feedback
 - local AI-powered analysis
-- career guidance
+- career guidance.
 
 ---
 
@@ -39,7 +39,7 @@ The user chooses one of two modes:
   Enter personal details such as:
   - number of projects
   - DSA level
-  - programming languages known
+  - programming languages known.
 
 ---
 
@@ -49,7 +49,7 @@ The app processes the input and evaluates developer progress using key indicator
 - language diversity
 - GitHub stars
 - recent repository activity
-- DSA strength
+- DSA strength.
 
 ---
 
@@ -59,7 +59,7 @@ Using the analyzed data, the app generates a score out of 100.
 This score reflects the user's overall developer profile and is used to classify them as:
 - **Beginner**
 - **Intermediate**
-- **Advanced**
+- **Advanced**.
 
 ---
 
@@ -99,42 +99,42 @@ Each analysis is stored locally in the browser using `localStorage`, allowing us
   - total projects
   - programming languages
   - stars
-  - update activity
+  - update activity.
 
 ### ✍️ Manual Analysis Mode
 - Lets users enter project count, DSA level, and languages
-- Generates a score without GitHub input
+- Generates a score without GitHub input.
 
 ### 📊 Smart Scoring System
 - Projects contribute to the score
 - Language variety adds value
 - Stars improve the score
-- Recent activity increases the score
+- Recent activity increases the score.
 
 ### 🏷️ Skill Level Classification
 - Beginner
 - Intermediate
-- Advanced
+- Advanced.
 
 ### 🤖 AI-Powered Insights
 - Uses a local LLM through Ollama
 - Generates personalized developer feedback
-- Shows strengths, weaknesses, and next steps
+- Shows strengths, weaknesses, and next steps.
 
 ### 📈 Score History
 - Stores past analyses locally
-- Saves score, level, languages, username, date, and time
+- Saves score, level, languages, username, date, and time.
 
 ### 🛣️ Career Roadmap Generator
 - Suggests learning paths based on user goals
-- Useful for students and beginners choosing a direction
+- Useful for students and beginners choosing a direction.
 
 ### 🎨 Modern Interface
 - Dark / light theme toggle
 - Animated score display
 - Language breakdown bars
 - Top repository cards
-- Toast notifications for quick feedback
+- Toast notifications for quick feedback.
 
 ---
 
