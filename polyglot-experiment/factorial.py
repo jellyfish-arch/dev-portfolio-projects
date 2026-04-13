@@ -10,6 +10,6 @@ def factorial(n):
 number = 5
 result = factorial(number)
 
-print(f"Language: Python")
-print(f"Task: Factorial Calculator")
-print(f"Factorial of {number} = {result}")
+print(f"Language -> Python")
+print(f"Task -> Factorial Calculator")
+print(f"Factorial of {number} : {result}")
