@@ -1,34 +1,26 @@
-# \# 🚀 Dev Portfolio Projects
+# 🚀 Dev Portfolio Projects
 
-# 
+A collection of polished, real-world projects built to demonstrate applied engineering skills.
 
-# A collection of projects showcasing my development skills and growth as a developer.
+---
 
-# 
+## 📁 Projects
 
-# \## 📁 Projects
+| Project | Description | Tech Stack |
+|---------|-------------|------------|
+| [🧠 DevTrack AI](./dev-track-ai/) | Developer growth intelligence system — GitHub profile analysis, AI-powered feedback, career roadmaps | HTML, CSS, JavaScript |
+| [⚙️ NexusFlow](./nexus-task-orchestrator/) | High-performance async task orchestration engine with retry logic, state persistence & observer pattern | Python, asyncio, pytest |
+| [🔐 CipherVault](./cipher-vault/) | Browser-based password manager & encryption toolkit using AES-256-GCM + PBKDF2 via Web Crypto API | HTML, CSS, JavaScript |
+| [🧪 Polyglot Experiment](./polyglot-experiment/) | Cross-language experiment solving the same problems in Python, Java, and JavaScript | Python, Java, HTML/JS |
 
-# 
+---
 
-# | Project | Description | Tech Stack |
+## 🎯 Goal
 
-# |---------|-------------|------------|
+To build and showcase real-world projects that demonstrate applied engineering skills to potential employers — covering web development, systems engineering, cryptography, and language diversity.
 
-# | Coming soon... | | |
+---
 
-# 
+## 👨‍💻 Author
 
-# \## 🎯 Goal
-
-# 
-
-# To build and showcase real-world projects that demonstrate my skills to potential employers.
-
-# 
-
-# \## 👨‍💻 Author
-
-# 
-
-# Jelly Fish — \[GitHub](https://github.com/jellyfish-arch)
-
+Jelly Fish — [GitHub](https://github.com/jellyfish-arch)
