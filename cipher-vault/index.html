@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +7,7 @@
   <title>CipherVault</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -15,16 +15,18 @@
   <!-- ─── LOCK SCREEN ─────────────────────────────────────────────────── -->
   <div id="lock-screen" class="lock-screen">
 
-    <!-- Decorative grid + ambient glow -->
-    <div class="lock-grid-bg"></div>
-    <div class="lock-ambient"></div>
+    <!-- Theme toggle on lock screen -->
+    <button id="lock-theme-btn" class="lock-theme-btn" aria-label="Toggle theme">
+      <svg id="lock-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg id="lock-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
 
     <div class="lock-shell">
 
       <!-- Brand mark -->
       <div class="lock-brand">
         <div class="lock-emblem">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
@@ -34,151 +36,157 @@
 
       <!-- ── STEP 1: Main Login / Create ── -->
       <div id="step-main" class="lock-panel active">
-        <div class="lock-heading">
-          <h1 id="lock-title-text">Welcome back</h1>
-          <p id="lock-subtitle-text" class="lock-desc">Enter your master password to unlock the vault.</p>
-        </div>
+        <div class="lock-card">
+          <div class="lock-heading">
+            <h1 id="lock-title-text">Welcome back</h1>
+            <p id="lock-subtitle-text" class="lock-desc">Enter your master password to unlock the vault.</p>
+          </div>
 
-        <div class="lock-form" id="lock-form">
+          <div class="lock-form" id="lock-form">
 
-          <!-- Confirm password (only for new vault) -->
-          <div class="field-row" id="confirm-group" style="display:none;">
-            <label class="field-label" for="confirm-password-input">Confirm Password</label>
-            <div class="field-wrap">
-              <input type="password" id="confirm-password-input" placeholder="Re-enter your password" maxlength="64" autocomplete="new-password" />
-              <button class="field-btn toggle-pw-btn" data-target="confirm-password-input" aria-label="Toggle">
-                <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
+            <!-- Confirm password (only for new vault) -->
+            <div class="field-row" id="confirm-group" style="display:none;">
+              <label class="field-label" for="confirm-password-input">Confirm Password</label>
+              <div class="field-wrap">
+                <input type="password" id="confirm-password-input" placeholder="Re-enter your password" maxlength="64" autocomplete="new-password" />
+                <button class="field-btn toggle-pw-btn" data-target="confirm-password-input" aria-label="Toggle">
+                  <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div class="field-row">
-            <label class="field-label" for="master-password-input">Master Password</label>
-            <div class="field-wrap">
-              <input type="password" id="master-password-input" placeholder="Enter master password" maxlength="64" autocomplete="current-password" />
-              <button class="field-btn toggle-pw-btn" data-target="master-password-input" aria-label="Toggle">
-                <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
+            <div class="field-row">
+              <label class="field-label" for="master-password-input">Master Password</label>
+              <div class="field-wrap">
+                <input type="password" id="master-password-input" placeholder="Enter master password" maxlength="64" autocomplete="current-password" />
+                <button class="field-btn toggle-pw-btn" data-target="master-password-input" aria-label="Toggle">
+                  <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
             </div>
+
+            <div class="strength-row" id="pw-strength-wrap" style="display:none;">
+              <div class="strength-track"><div id="pw-strength-bar" class="strength-fill"></div></div>
+              <span id="pw-strength-label" class="strength-tag">Weak</span>
+            </div>
+
+            <button id="unlock-btn" class="btn-gold btn-full">
+              <span id="unlock-btn-text">Unlock Vault</span>
+              <div class="btn-loader" id="unlock-spinner" style="display:none;"></div>
+            </button>
+
+            <!-- Forgot password link (only shown if vault exists + recovery set) -->
+            <div id="forgot-link-wrap" class="forgot-link-area" style="display:none;">
+              <button id="forgot-btn" class="link-btn">Forgot master password?</button>
+            </div>
+
+            <p class="lock-meta">AES-256-GCM · Local only · Zero servers</p>
           </div>
-
-          <div class="strength-row" id="pw-strength-wrap" style="display:none;">
-            <div class="strength-track"><div id="pw-strength-bar" class="strength-fill"></div></div>
-            <span id="pw-strength-label" class="strength-tag">Weak</span>
-          </div>
-
-          <button id="unlock-btn" class="btn-gold btn-full">
-            <span id="unlock-btn-text">Unlock Vault</span>
-            <div class="btn-loader" id="unlock-spinner" style="display:none;"></div>
-          </button>
-
-          <!-- Forgot password link (only shown if vault exists + recovery set) -->
-          <div id="forgot-link-wrap" class="forgot-link-area" style="display:none;">
-            <button id="forgot-btn" class="link-btn">Forgot master password?</button>
-          </div>
-
-          <p class="lock-meta">AES-256-GCM · Local only · Zero servers</p>
         </div>
       </div>
 
       <!-- ── STEP 2: Security Questions Setup ── -->
       <div id="step-questions" class="lock-panel">
-        <div class="lock-heading">
-          <h1>Secure Recovery</h1>
-          <p class="lock-desc">Set two security questions so you can recover your vault if you forget your master password.</p>
-        </div>
-
-        <div class="lock-form">
-          <div class="field-row">
-            <label class="field-label" for="sq1-select">Security Question 1</label>
-            <select id="sq1-select" class="field-select">
-              <option value="">— Choose a question —</option>
-              <option value="pet">What was the name of your first pet?</option>
-              <option value="city">What city were you born in?</option>
-              <option value="school">What was the name of your first school?</option>
-              <option value="car">What was the make of your first car?</option>
-              <option value="nick">What was your childhood nickname?</option>
-              <option value="road">What street did you grow up on?</option>
-              <option value="teacher">What was your favourite teacher's last name?</option>
-            </select>
+        <div class="lock-card">
+          <div class="lock-heading">
+            <h1>Secure Recovery</h1>
+            <p class="lock-desc">Set two security questions to recover your vault if you forget your master password.</p>
           </div>
-          <div class="field-row">
-            <label class="field-label" for="sq1-answer">Your Answer</label>
-            <div class="field-wrap">
-              <input type="password" id="sq1-answer" placeholder="Answer (case-insensitive)" maxlength="80" />
-              <button class="field-btn toggle-pw-btn" data-target="sq1-answer" aria-label="Toggle">
-                <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
+
+          <div class="lock-form">
+            <div class="field-row">
+              <label class="field-label" for="sq1-select">Security Question 1</label>
+              <select id="sq1-select" class="field-select">
+                <option value="">— Choose a question —</option>
+                <option value="pet">What was the name of your first pet?</option>
+                <option value="city">What city were you born in?</option>
+                <option value="school">What was the name of your first school?</option>
+                <option value="car">What was the make of your first car?</option>
+                <option value="nick">What was your childhood nickname?</option>
+                <option value="road">What street did you grow up on?</option>
+                <option value="teacher">What was your favourite teacher's last name?</option>
+              </select>
             </div>
-          </div>
-
-          <div class="divider-line"></div>
-
-          <div class="field-row">
-            <label class="field-label" for="sq2-select">Security Question 2</label>
-            <select id="sq2-select" class="field-select">
-              <option value="">— Choose a question —</option>
-              <option value="pet">What was the name of your first pet?</option>
-              <option value="city">What city were you born in?</option>
-              <option value="school">What was the name of your first school?</option>
-              <option value="car">What was the make of your first car?</option>
-              <option value="nick">What was your childhood nickname?</option>
-              <option value="road">What street did you grow up on?</option>
-              <option value="teacher">What was your favourite teacher's last name?</option>
-            </select>
-          </div>
-          <div class="field-row">
-            <label class="field-label" for="sq2-answer">Your Answer</label>
-            <div class="field-wrap">
-              <input type="password" id="sq2-answer" placeholder="Answer (case-insensitive)" maxlength="80" />
-              <button class="field-btn toggle-pw-btn" data-target="sq2-answer" aria-label="Toggle">
-                <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
+            <div class="field-row">
+              <label class="field-label" for="sq1-answer">Your Answer</label>
+              <div class="field-wrap">
+                <input type="password" id="sq1-answer" placeholder="Answer (case-insensitive)" maxlength="80" />
+                <button class="field-btn toggle-pw-btn" data-target="sq1-answer" aria-label="Toggle">
+                  <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
             </div>
-          </div>
 
-          <button id="save-questions-btn" class="btn-gold btn-full">Save & Enter Vault</button>
-          <button id="skip-questions-btn" class="link-btn" style="text-align:center;margin-top:4px;">Skip for now (not recommended)</button>
+            <div class="divider-line"></div>
+
+            <div class="field-row">
+              <label class="field-label" for="sq2-select">Security Question 2</label>
+              <select id="sq2-select" class="field-select">
+                <option value="">— Choose a question —</option>
+                <option value="pet">What was the name of your first pet?</option>
+                <option value="city">What city were you born in?</option>
+                <option value="school">What was the name of your first school?</option>
+                <option value="car">What was the make of your first car?</option>
+                <option value="nick">What was your childhood nickname?</option>
+                <option value="road">What street did you grow up on?</option>
+                <option value="teacher">What was your favourite teacher's last name?</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label class="field-label" for="sq2-answer">Your Answer</label>
+              <div class="field-wrap">
+                <input type="password" id="sq2-answer" placeholder="Answer (case-insensitive)" maxlength="80" />
+                <button class="field-btn toggle-pw-btn" data-target="sq2-answer" aria-label="Toggle">
+                  <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <button id="save-questions-btn" class="btn-gold btn-full">Save &amp; Enter Vault</button>
+            <button id="skip-questions-btn" class="link-btn" style="text-align:center;margin-top:4px;">Skip for now (not recommended)</button>
+          </div>
         </div>
       </div>
 
       <!-- ── STEP 3: Forgot Password Recovery ── -->
       <div id="step-forgot" class="lock-panel">
-        <div class="lock-heading">
-          <h1>Account Recovery</h1>
-          <p class="lock-desc">Answer your security questions to recover your master password.</p>
-        </div>
+        <div class="lock-card">
+          <div class="lock-heading">
+            <h1>Account Recovery</h1>
+            <p class="lock-desc">Answer your security questions to recover your master password.</p>
+          </div>
 
-        <div class="lock-form">
-          <div class="field-row">
-            <label class="field-label" id="forgot-q1-label">Question 1</label>
-            <div class="field-wrap">
-              <input type="password" id="forgot-a1" placeholder="Your answer" maxlength="80" />
-              <button class="field-btn toggle-pw-btn" data-target="forgot-a1" aria-label="Toggle">
-                <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
+          <div class="lock-form">
+            <div class="field-row">
+              <label class="field-label" id="forgot-q1-label">Question 1</label>
+              <div class="field-wrap">
+                <input type="password" id="forgot-a1" placeholder="Your answer" maxlength="80" />
+                <button class="field-btn toggle-pw-btn" data-target="forgot-a1" aria-label="Toggle">
+                  <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div class="field-row">
-            <label class="field-label" id="forgot-q2-label">Question 2</label>
-            <div class="field-wrap">
-              <input type="password" id="forgot-a2" placeholder="Your answer" maxlength="80" />
-              <button class="field-btn toggle-pw-btn" data-target="forgot-a2" aria-label="Toggle">
-                <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
+            <div class="field-row">
+              <label class="field-label" id="forgot-q2-label">Question 2</label>
+              <div class="field-wrap">
+                <input type="password" id="forgot-a2" placeholder="Your answer" maxlength="80" />
+                <button class="field-btn toggle-pw-btn" data-target="forgot-a2" aria-label="Toggle">
+                  <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
             </div>
-          </div>
 
-          <!-- Recovered password display -->
-          <div id="recovered-pw-box" class="recovered-box" style="display:none;">
-            <div class="recovered-label">Your master password</div>
-            <div class="recovered-value mono" id="recovered-pw-text">—</div>
-            <button class="link-btn" id="recovered-copy-btn" style="margin-top:6px;">Copy to clipboard</button>
-          </div>
+            <!-- Recovered password display -->
+            <div id="recovered-pw-box" class="recovered-box" style="display:none;">
+              <div class="recovered-label">Your master password</div>
+              <div class="recovered-value mono" id="recovered-pw-text">—</div>
+              <button class="link-btn" id="recovered-copy-btn" style="margin-top:6px;">Copy to clipboard</button>
+            </div>
 
-          <button id="recover-btn" class="btn-gold btn-full">Verify &amp; Recover</button>
-          <button id="back-to-login-btn" class="link-btn" style="text-align:center;margin-top:4px;">← Back to login</button>
+            <button id="recover-btn" class="btn-gold btn-full">Verify &amp; Recover</button>
+            <button id="back-to-login-btn" class="link-btn" style="text-align:center;margin-top:4px;">Back to login</button>
+          </div>
         </div>
       </div>
 
@@ -194,43 +202,45 @@
       <div class="sidebar-top">
         <div class="sidebar-logo">
           <div class="sidebar-logo-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           </div>
           <span>CipherVault</span>
         </div>
         <button id="close-sidebar-btn" class="icon-btn close-sidebar-btn" aria-label="Close sidebar">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
 
       <nav class="sidebar-nav">
+        <span class="sidebar-section-label">Vault</span>
         <a href="#" class="nav-item active" data-view="vault">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
           <span>My Vault</span>
           <span class="nav-badge" id="vault-count-badge">0</span>
         </a>
+        <span class="sidebar-section-label">Tools</span>
         <a href="#" class="nav-item" data-view="generator">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           <span>Generator</span>
         </a>
         <a href="#" class="nav-item" data-view="encrypt">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
           <span>Encrypt Text</span>
         </a>
         <a href="#" class="nav-item" data-view="audit">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           <span>Security Audit</span>
         </a>
       </nav>
 
       <div class="sidebar-footer">
         <div class="vault-stats">
-          <div class="stat-chip"><span class="stat-num" id="stat-total">0</span><span class="stat-lbl">Entries</span></div>
+          <div class="stat-chip"><span class="stat-num" id="stat-total">0</span><span class="stat-lbl">Total</span></div>
           <div class="stat-chip"><span class="stat-num warn" id="stat-weak">0</span><span class="stat-lbl">Weak</span></div>
           <div class="stat-chip"><span class="stat-num warn" id="stat-reused">0</span><span class="stat-lbl">Reused</span></div>
         </div>
         <button id="lock-vault-btn" class="btn-lock">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           Lock Vault
         </button>
       </div>
@@ -242,16 +252,22 @@
       <!-- Top Bar -->
       <header class="topbar">
         <button id="menu-btn" class="icon-btn menu-btn" aria-label="Open menu">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
         <div class="topbar-search">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="search-input" placeholder="Search vault  ⌘K" autocomplete="off" />
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search-input" placeholder="Search vault  Ctrl+K" autocomplete="off" />
         </div>
-        <button id="add-entry-btn" class="btn-gold btn-sm">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          New Entry
-        </button>
+        <div class="topbar-right">
+          <button id="theme-btn" class="theme-btn" aria-label="Toggle theme">
+            <svg id="app-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg id="app-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+          <button id="add-entry-btn" class="btn-gold btn-sm">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Entry
+          </button>
+        </div>
       </header>
 
       <div class="views-container">
@@ -272,10 +288,10 @@
           <div id="vault-list" class="vault-list">
             <div class="empty-state" id="vault-empty">
               <div class="empty-icon">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
               </div>
               <p class="empty-title">Your vault is empty</p>
-              <p class="empty-sub">Press <kbd>⌘N</kbd> or click New Entry to get started.</p>
+              <p class="empty-sub">Press <kbd>Ctrl+N</kbd> or click New Entry to get started.</p>
             </div>
           </div>
         </section>
@@ -288,11 +304,11 @@
           <div class="gen-card">
             <div class="gen-output-wrap">
               <div id="gen-output" class="gen-output mono">Click Generate</div>
-              <button class="icon-btn" id="gen-copy-btn" title="Copy">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <button class="icon-btn" id="gen-copy-btn" title="Copy password">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </button>
             </div>
-            <div class="strength-row" style="margin-top:10px;">
+            <div class="strength-row">
               <div class="strength-track flex1"><div id="gen-strength-bar" class="strength-fill"></div></div>
               <span id="gen-strength-label" class="strength-tag">—</span>
             </div>
@@ -334,9 +350,9 @@
                   </button>
                 </div>
               </div>
-              <button class="btn-gold btn-full" id="enc-btn">Encrypt →</button>
+              <button class="btn-gold btn-full" id="enc-btn">Encrypt</button>
               <div class="crypto-result" id="enc-result-wrap" style="display:none;">
-                <div class="result-label">Ciphertext (Base64-AES-256-GCM)</div>
+                <div class="result-label">Ciphertext (Base64 · AES-256-GCM)</div>
                 <div class="result-box mono" id="enc-result"></div>
                 <button class="btn-ghost btn-sm" id="enc-copy-btn">Copy Ciphertext</button>
               </div>
@@ -356,7 +372,7 @@
                   </button>
                 </div>
               </div>
-              <button class="btn-gold btn-full" id="dec-btn">Decrypt →</button>
+              <button class="btn-gold btn-full" id="dec-btn">Decrypt</button>
               <div class="crypto-result" id="dec-result-wrap" style="display:none;">
                 <div class="result-label">Decrypted Text</div>
                 <div class="result-box" id="dec-result"></div>
@@ -394,7 +410,7 @@
             </div>
           </div>
           <button class="btn-gold" id="run-audit-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             Run Security Audit
           </button>
         </section>
@@ -409,7 +425,7 @@
       <div class="modal-header">
         <h3 id="modal-title">New Entry</h3>
         <button class="icon-btn" id="modal-close-btn" aria-label="Close">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
       <form id="entry-form" novalidate>
