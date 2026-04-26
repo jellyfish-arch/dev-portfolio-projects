@@ -68,7 +68,7 @@ const Crypto = (() => {
 const Store = (() => {
   const VAULT_KEY    = 'cv_vault';
   const VERIFIER_KEY = 'cv_verifier';
-  const RECOVERY_KEY = 'cv_recovery'; // security questions recovery blob
+  const RECOVERY_KEY = 'cv_recovery';
 
   let masterKey = null;
 
@@ -105,12 +105,6 @@ const Store = (() => {
     localStorage.setItem(VAULT_KEY, encrypted);
   }
 
-  /* ── Security Question Recovery ───────────────────────────── */
-
-  /**
-   * Save security questions + encrypt the master password with a key
-   * derived from the combined (normalized) answers.
-   */
   async function saveRecovery(q1id, q1answer, q2id, q2answer, masterPassword) {
     const combinedAnswer = normalizeAnswer(q1answer) + '||' + normalizeAnswer(q2answer);
     const encryptedMaster = await Crypto.encrypt(masterPassword, combinedAnswer);
@@ -118,20 +112,14 @@ const Store = (() => {
     localStorage.setItem(RECOVERY_KEY, payload);
   }
 
-  /**
-   * Attempt recovery: derive key from answers, decrypt master password.
-   * Returns master password string on success, or throws.
-   */
   async function recoverMaster(a1, a2) {
     const raw = localStorage.getItem(RECOVERY_KEY);
     if (!raw) throw new Error('No recovery data found.');
     const { encryptedMaster } = JSON.parse(raw);
     const combinedAnswer = normalizeAnswer(a1) + '||' + normalizeAnswer(a2);
-    // Will throw if answers are wrong (AES-GCM auth failure)
     return await Crypto.decrypt(encryptedMaster, combinedAnswer);
   }
 
-  /** Get saved question IDs for display */
   function getRecoveryQuestions() {
     const raw = localStorage.getItem(RECOVERY_KEY);
     if (!raw) return null;
@@ -168,7 +156,7 @@ const QUESTION_LABELS = {
    PASSWORD STRENGTH
 ═══════════════════════════════════════════════════════════ */
 function scorePassword(pw) {
-  if (!pw || pw.length === 0) return { score: 0, label: '—', color: '#3d4460' };
+  if (!pw || pw.length === 0) return { score: 0, label: '—', color: 'var(--text-3)' };
   let s = 0;
   if (pw.length >= 8)  s += 10;
   if (pw.length >= 12) s += 15;
@@ -183,11 +171,11 @@ function scorePassword(pw) {
   s = Math.min(100, s);
 
   let label, color;
-  if (s < 30)      { label = 'Very Weak'; color = '#f87171'; }
-  else if (s < 50) { label = 'Weak';      color = '#fb923c'; }
-  else if (s < 70) { label = 'Fair';      color = '#fbbf24'; }
-  else if (s < 85) { label = 'Strong';    color = '#34d399'; }
-  else             { label = 'Very Strong'; color = '#2dd4bf'; }
+  if (s < 30)      { label = 'Very Weak'; color = '#ef4444'; }
+  else if (s < 50) { label = 'Weak';      color = '#f97316'; }
+  else if (s < 70) { label = 'Fair';      color = '#f59e0b'; }
+  else if (s < 85) { label = 'Strong';    color = '#22c55e'; }
+  else             { label = 'Very Strong'; color = '#14b8a6'; }
 
   return { score: s, label, color };
 }
@@ -247,7 +235,7 @@ async function copyText(text, label = 'Copied') {
       document.execCommand('copy');
       ta.remove();
     }
-    toast(`${label} to clipboard`, 'success');
+    toast(`${label} copied to clipboard`, 'success');
   } catch {
     toast('Copy failed — try manually', 'error');
   }
@@ -255,15 +243,21 @@ async function copyText(text, label = 'Copied') {
 
 
 /* ═══════════════════════════════════════════════════════════
-   CATEGORY HELPERS
+   CATEGORY HELPERS  —  no emojis, use initials + colors
 ═══════════════════════════════════════════════════════════ */
-const CAT_EMOJI = { Social: '💬', Work: '💼', Finance: '💰', Dev: '🛠️', Other: '📦' };
 const CAT_COLOR = {
-  Social:  { bg: 'rgba(99,102,241,0.18)',  fg: '#818cf8', bar: '#6366f1' },
-  Work:    { bg: 'rgba(59,130,246,0.18)',  fg: '#60a5fa', bar: '#3b82f6' },
-  Finance: { bg: 'rgba(212,165,53,0.18)', fg: '#e8c06a', bar: '#d4a535' },
-  Dev:     { bg: 'rgba(45,212,191,0.18)', fg: '#2dd4bf', bar: '#14b8a6' },
-  Other:   { bg: 'rgba(148,163,184,0.18)',fg: '#94a3b8', bar: '#64748b' },
+  Social:  { bg: 'rgba(99,102,241,0.15)',  fg: '#818cf8', bar: '#6366f1' },
+  Work:    { bg: 'rgba(59,130,246,0.15)',  fg: '#60a5fa', bar: '#3b82f6' },
+  Finance: { bg: 'rgba(212,165,53,0.15)',  fg: '#e8c06a', bar: '#d4a535' },
+  Dev:     { bg: 'rgba(20,184,166,0.15)',  fg: '#14b8a6', bar: '#0d9488' },
+  Other:   { bg: 'rgba(148,163,184,0.15)', fg: '#94a3b8', bar: '#64748b' },
+};
+
+/* SVG icons for audit issues */
+const AUDIT_SVG = {
+  danger: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>`,
+  warn:   `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/></svg>`,
+  info:   `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><circle cx="12" cy="8" r="0.5" fill="currentColor"/></svg>`,
 };
 
 
@@ -275,9 +269,43 @@ const on = (el, ev, fn) => el && el.addEventListener(ev, fn);
 
 
 /* ═══════════════════════════════════════════════════════════
+   THEME TOGGLE
+═══════════════════════════════════════════════════════════ */
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('cv_theme', theme);
+
+  const isDark = theme === 'dark';
+
+  // Lock screen icons
+  const lockSun  = $('lock-icon-sun');
+  const lockMoon = $('lock-icon-moon');
+  if (lockSun)  lockSun.style.display  = isDark ? 'none' : 'block';
+  if (lockMoon) lockMoon.style.display = isDark ? 'block' : 'none';
+
+  // App topbar icons
+  const appSun  = $('app-icon-sun');
+  const appMoon = $('app-icon-moon');
+  if (appSun)  appSun.style.display  = isDark ? 'none' : 'block';
+  if (appMoon) appMoon.style.display = isDark ? 'block' : 'none';
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+
+on($('lock-theme-btn'), 'click', toggleTheme);
+on($('theme-btn'),      'click', toggleTheme);
+
+// Init theme from storage
+applyTheme(localStorage.getItem('cv_theme') || 'dark');
+
+
+/* ═══════════════════════════════════════════════════════════
    LOCK SCREEN — STEP ROUTING
 ═══════════════════════════════════════════════════════════ */
-let pendingMasterPassword = null; // held between step-1 and step-2
+let pendingMasterPassword = null;
 
 function showLockStep(stepId) {
   document.querySelectorAll('.lock-panel').forEach(p => p.classList.remove('active'));
@@ -285,9 +313,8 @@ function showLockStep(stepId) {
   if (el) el.classList.add('active');
 }
 
-/* Initialise the lock screen state */
 function initLockScreen() {
-  const hasVault  = Store.hasVault();
+  const hasVault    = Store.hasVault();
   const hasRecovery = Store.hasRecovery();
 
   if (hasVault) {
@@ -309,7 +336,6 @@ function initLockScreen() {
   showLockStep('step-main');
 }
 
-/* Master password input — strength while creating */
 on($('master-password-input'), 'input', () => {
   if (!Store.hasVault()) {
     applyStrength($('pw-strength-bar'), $('pw-strength-label'), $('master-password-input').value);
@@ -336,23 +362,17 @@ on($('unlock-btn'), 'click', async () => {
 
   try {
     if (!Store.hasVault()) {
-      // ── Creating new vault ──
       await Store.saveVerifier(pw);
       await Store.setMaster(pw);
       pendingMasterPassword = pw;
-
-      // Go to security questions step
       showLockStep('step-questions');
-
     } else {
-      // ── Unlocking existing vault ──
       const valid = await Store.verifyPassphrase(pw);
       if (!valid) { toast('Wrong master password', 'error'); return; }
       await Store.setMaster(pw);
       entries = await Store.load();
       enterApp();
     }
-
   } finally {
     spinner.style.display = 'none';
     btnTxt.style.display  = 'block';
@@ -375,7 +395,7 @@ on($('save-questions-btn'), 'click', async () => {
   try {
     await Store.saveRecovery(q1id, q1ans, q2id, q2ans, pendingMasterPassword);
     entries = await Store.load();
-    toast('Recovery questions saved!', 'success');
+    toast('Recovery questions saved', 'success');
     pendingMasterPassword = null;
     enterApp();
   } catch {
@@ -385,7 +405,7 @@ on($('save-questions-btn'), 'click', async () => {
 
 on($('skip-questions-btn'), 'click', async () => {
   entries = await Store.load();
-  toast('Vault created (no recovery set)', 'info');
+  toast('Vault created — no recovery set', 'info');
   pendingMasterPassword = null;
   enterApp();
 });
@@ -417,17 +437,14 @@ on($('recover-btn'), 'click', async () => {
   try {
     const masterPassword = await Store.recoverMaster(a1, a2);
 
-    // Show the recovered password
     $('recovered-pw-text').textContent = masterPassword;
     $('recovered-pw-box').style.display = 'flex';
-    $('recover-btn').textContent = 'Answers correct ✓';
+    $('recover-btn').textContent = 'Answers verified';
 
-    // Also auto-fill the password field on step-main
     $('master-password-input').value = masterPassword;
 
-    toast('Password recovered! You can now log in.', 'success', 5000);
+    toast('Password recovered. You can now log in.', 'success', 5000);
 
-    // After a moment, go back to login
     setTimeout(() => {
       initLockScreen();
       $('master-password-input').value = masterPassword;
@@ -487,10 +504,10 @@ document.addEventListener('click', e => {
     if (!span) return;
 
     if (span.dataset.hidden === 'true') {
-      span.textContent   = decodeURIComponent(span.dataset.plain || '');
+      span.textContent    = decodeURIComponent(span.dataset.plain || '');
       span.dataset.hidden = 'false';
     } else {
-      span.textContent   = '••••••••';
+      span.textContent    = '••••••••';
       span.dataset.hidden = 'true';
     }
 
@@ -504,9 +521,7 @@ document.addEventListener('click', e => {
   if (!input) return;
   input.type = input.type === 'password' ? 'text' : 'password';
   const icon = btn.querySelector('.eye-icon');
-  if (icon) {
-    icon.style.opacity = input.type === 'text' ? '0.5' : '1';
-  }
+  if (icon) icon.style.opacity = input.type === 'text' ? '0.5' : '1';
 });
 
 
@@ -524,21 +539,20 @@ navItems.forEach(item => {
     item.classList.add('active');
     views.forEach(v => v.classList.remove('active'));
     $('view-' + view).classList.add('active');
-    if (window.innerWidth <= 900) closeSidebar();
+    if (window.innerWidth <= 960) closeSidebar();
   });
 });
 
-/* Sidebar toggle */
-on($('menu-btn'), 'click', () => $('sidebar').classList.add('open'));
-on($('close-sidebar-btn'), 'click', closeSidebar);
+on($('menu-btn'),         'click', () => $('sidebar').classList.add('open'));
+on($('close-sidebar-btn'),'click', closeSidebar);
 function closeSidebar() { $('sidebar').classList.remove('open'); }
 
 
 /* ═══════════════════════════════════════════════════════════
    VAULT RENDER
 ═══════════════════════════════════════════════════════════ */
-let activeFilter  = 'All';
-let searchQuery   = '';
+let activeFilter = 'All';
+let searchQuery  = '';
 
 function filteredEntries() {
   return entries.filter(e => {
@@ -569,15 +583,16 @@ function renderVault() {
 
   visible.forEach(entry => {
     const { score, color } = scorePassword(entry.password || '');
-    const cat = CAT_COLOR[entry.category] || CAT_COLOR['Other'];
-    const emoji = CAT_EMOJI[entry.category] || '📦';
+    const cat     = CAT_COLOR[entry.category] || CAT_COLOR['Other'];
+    // Use the first letter of the site name as the avatar — clean and professional
+    const initial = (entry.name || '?').charAt(0).toUpperCase();
 
     const row = document.createElement('div');
     row.className = 'entry-row';
     row.style.setProperty('--entry-color', cat.bar);
 
     row.innerHTML = `
-      <div class="entry-avatar" style="background:${cat.bg}; color:${cat.fg};">${emoji}</div>
+      <div class="entry-avatar" style="background:${cat.bg}; color:${cat.fg};">${initial}</div>
       <div class="entry-info">
         <div class="entry-name">${esc(entry.name)}</div>
         ${entry.username ? `<div class="entry-user">${esc(entry.username)}</div>` : ''}
@@ -593,14 +608,14 @@ function renderVault() {
             <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
           <button class="field-btn" data-copy-entry="${entry.id}" title="Copy password">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           </button>
         </div>
         <button class="icon-btn" data-edit-entry="${entry.id}" title="Edit">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         </button>
         <button class="icon-btn" data-delete-entry="${entry.id}" title="Delete">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
         </button>
       </div>
     `;
@@ -608,34 +623,16 @@ function renderVault() {
   });
 }
 
-/* Entry actions delegation */
+/* Entry action delegation */
 document.addEventListener('click', async e => {
-  // Toggle password visibility in vault
-  const toggleBtn = e.target.closest('[data-target-entry]');
-  if (toggleBtn) {
-    const id  = toggleBtn.dataset.targetEntry;
-    const span = $('pw-' + id);
-    if (!span) return;
-    if (span.dataset.hidden === 'true') {
-      span.textContent   = span.dataset.plain;
-      span.dataset.hidden = 'false';
-    } else {
-      span.textContent   = '••••••••';
-      span.dataset.hidden = 'true';
-    }
-    return;
-  }
-
-  // Copy password
   const copyBtn = e.target.closest('[data-copy-entry]');
   if (copyBtn) {
     const id   = copyBtn.dataset.copyEntry;
     const span = $('pw-' + id);
-    if (span) copyText(span.dataset.plain, 'Password');
+    if (span) copyText(decodeURIComponent(span.dataset.plain), 'Password');
     return;
   }
 
-  // Edit entry
   const editBtn = e.target.closest('[data-edit-entry]');
   if (editBtn) {
     const id    = editBtn.dataset.editEntry;
@@ -644,7 +641,6 @@ document.addEventListener('click', async e => {
     return;
   }
 
-  // Delete entry
   const delBtn = e.target.closest('[data-delete-entry]');
   if (delBtn) {
     const id = delBtn.dataset.deleteEntry;
@@ -668,13 +664,11 @@ function esc(str) {
   return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* Search */
 on($('search-input'), 'input', e => {
   searchQuery = e.target.value.toLowerCase().trim();
   renderVault();
 });
 
-/* Filter chips */
 document.getElementById('filter-chips').addEventListener('click', e => {
   const chip = e.target.closest('.chip');
   if (!chip) return;
@@ -691,7 +685,7 @@ document.getElementById('filter-chips').addEventListener('click', e => {
 const modalOverlay = $('entry-modal-overlay');
 
 function openAddModal() {
-  $('modal-title').textContent   = 'New Entry';
+  $('modal-title').textContent    = 'New Entry';
   $('modal-save-btn').textContent = 'Save Entry';
   $('entry-form').reset();
   $('entry-id').value = '';
@@ -700,7 +694,7 @@ function openAddModal() {
 }
 
 function openEditModal(entry) {
-  $('modal-title').textContent   = 'Edit Entry';
+  $('modal-title').textContent    = 'Edit Entry';
   $('modal-save-btn').textContent = 'Update Entry';
   $('entry-id').value       = entry.id;
   $('entry-name').value     = entry.name;
@@ -720,12 +714,10 @@ on($('modal-close-btn'), 'click', closeModal);
 on($('modal-cancel-btn'),'click', closeModal);
 on(modalOverlay, 'click', e => { if (e.target === modalOverlay) closeModal(); });
 
-// Password strength in modal
 on($('entry-password'), 'input', () => {
   applyStrength($('modal-strength-bar'), null, $('entry-password').value);
 });
 
-// Quick-generate in modal
 on($('modal-gen-btn'), 'click', () => {
   const pw = generatePassword({ length: 20, upper: true, lower: true, nums: true, syms: true });
   $('entry-password').value = pw;
@@ -733,7 +725,6 @@ on($('modal-gen-btn'), 'click', () => {
   applyStrength($('modal-strength-bar'), null, pw);
 });
 
-// Save entry
 on($('entry-form'), 'submit', async e => {
   e.preventDefault();
   const name = $('entry-name').value.trim();
@@ -768,7 +759,6 @@ on($('entry-form'), 'submit', async e => {
   closeModal();
 });
 
-/* Delete */
 async function deleteEntry(id) {
   entries = entries.filter(e => e.id !== id);
   await Store.save(entries);
@@ -857,9 +847,9 @@ function runAudit() {
   const weakList = entries.filter(e => scorePassword(e.password).score < 50);
   if (weakList.length > 0) {
     deductions += Math.min(50, weakList.length * 10);
-    issues.push({ type:'danger', icon:'⚠️',
+    issues.push({ type: 'danger',
       title: `${weakList.length} Weak Password${weakList.length > 1 ? 's' : ''}`,
-      desc:  `Entries: ${weakList.map(e=>e.name).join(', ')} — easily guessable.` });
+      desc:  `Entries: ${weakList.map(e => e.name).join(', ')} — easily guessable.` });
   }
 
   const pwMap = {};
@@ -867,24 +857,24 @@ function runAudit() {
   const reused = Object.values(pwMap).filter(a => a.length > 1);
   if (reused.length > 0) {
     deductions += Math.min(30, reused.length * 10);
-    issues.push({ type:'warn', icon:'🔁',
+    issues.push({ type: 'warn',
       title: `${reused.length} Reused Password${reused.length > 1 ? 's' : ''}`,
-      desc:  `Groups: ${reused.map(g=>g.join(' & ')).join('; ')} — use unique passwords.` });
+      desc:  `Groups: ${reused.map(g => g.join(' & ')).join('; ')} — use unique passwords.` });
   }
 
   const shortList = entries.filter(e => e.password.length < 12 && scorePassword(e.password).score >= 50);
   if (shortList.length > 0) {
     deductions += Math.min(20, shortList.length * 5);
-    issues.push({ type:'warn', icon:'📏',
+    issues.push({ type: 'warn',
       title: `${shortList.length} Short Password${shortList.length > 1 ? 's' : ''}`,
-      desc:  `${shortList.map(e=>e.name).join(', ')} — aim for 16+ characters.` });
+      desc:  `${shortList.map(e => e.name).join(', ')} — aim for 16+ characters.` });
   }
 
   const noUrl = entries.filter(e => !e.url);
   if (noUrl.length > 0) {
-    issues.push({ type:'info', icon:'🔗',
-      title: `${noUrl.length} Entry Without URL`,
-      desc:  `E.g.: ${noUrl.slice(0,3).map(e=>e.name).join(', ')} — URLs help identify entries quickly.` });
+    issues.push({ type: 'info',
+      title: `${noUrl.length} Entr${noUrl.length > 1 ? 'ies' : 'y'} Without URL`,
+      desc:  `e.g. ${noUrl.slice(0,3).map(e => e.name).join(', ')} — URLs help identify entries quickly.` });
   }
 
   const score = Math.max(0, 100 - deductions);
@@ -892,29 +882,31 @@ function runAudit() {
   // Animate ring
   const ringFill = $('audit-ring-fill');
   const offset = 314 - (score / 100) * 314;
-  ringFill.style.stroke = score >= 75 ? '#34d399' : score >= 50 ? '#fbbf24' : '#f87171';
+  ringFill.style.stroke = score >= 75 ? '#22c55e' : score >= 50 ? '#f59e0b' : '#ef4444';
   ringFill.style.strokeDashoffset = offset;
   $('audit-score-num').textContent = score;
 
-  let grade, desc;
-  if (score >= 80)      { grade = '🛡️ Excellent'; desc = 'Your vault is well secured!'; }
-  else if (score >= 60) { grade = '✅ Good'; desc = 'A few improvements recommended.'; }
-  else if (score >= 40) { grade = '⚠️ Fair'; desc = 'Several issues need attention.'; }
-  else                  { grade = '🚨 Critical'; desc = 'Serious security problems found.'; }
+  let grade, desc, gradeClass;
+  if (score >= 80)      { grade = 'Excellent';  desc = 'Your vault is well secured.';        gradeClass = 'grade-excellent'; }
+  else if (score >= 60) { grade = 'Good';        desc = 'A few improvements recommended.';   gradeClass = 'grade-good'; }
+  else if (score >= 40) { grade = 'Fair';        desc = 'Several issues need attention.';     gradeClass = 'grade-fair'; }
+  else                  { grade = 'Critical';    desc = 'Serious security problems found.';   gradeClass = 'grade-critical'; }
 
-  $('audit-score-grade').textContent = grade;
-  $('audit-score-desc').textContent  = desc;
+  const gradeEl = $('audit-score-grade');
+  gradeEl.textContent = grade;
+  gradeEl.className = `audit-grade ${gradeClass}`;
+  $('audit-score-desc').textContent = desc;
 
   const list = $('audit-issues-list');
   list.innerHTML = '';
   if (issues.length === 0) {
-    list.innerHTML = '<div style="color:var(--green);font-weight:700;">✅ No issues found — great work!</div>';
+    list.innerHTML = '<div style="color:var(--green);font-size:13px;font-weight:700;">No issues found — great work!</div>';
   } else {
     issues.forEach(issue => {
       const el = document.createElement('div');
       el.className = `audit-issue ${issue.type}`;
       el.innerHTML = `
-        <span class="audit-issue-icon">${issue.icon}</span>
+        <span class="audit-issue-icon">${AUDIT_SVG[issue.type] || ''}</span>
         <div class="audit-issue-body">
           <div class="audit-issue-title">${issue.title}</div>
           <div class="audit-issue-desc">${issue.desc}</div>
@@ -925,8 +917,8 @@ function runAudit() {
   toast('Audit complete', 'success');
 }
 
-/* Audit SVG gradient */
-const svgNS  = 'http://www.w3.org/2000/svg';
+/* Audit ring SVG gradient */
+const svgNS   = 'http://www.w3.org/2000/svg';
 const ringSvg = document.querySelector('.ring-svg');
 if (ringSvg) {
   const defs = document.createElementNS(svgNS, 'defs');
@@ -937,7 +929,7 @@ if (ringSvg) {
   const s1 = document.createElementNS(svgNS, 'stop');
   s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', '#d4a535');
   const s2 = document.createElementNS(svgNS, 'stop');
-  s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', '#2dd4bf');
+  s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', '#14b8a6');
   grad.appendChild(s1); grad.appendChild(s2);
   defs.appendChild(grad);
   ringSvg.insertBefore(defs, ringSvg.firstChild);
