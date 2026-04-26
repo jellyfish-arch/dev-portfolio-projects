@@ -234,7 +234,19 @@ function toast(message, type = 'info', duration = 3000) {
 
 async function copyText(text, label = 'Copied') {
   try {
-    await navigator.clipboard.writeText(text);
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
     toast(`${label} to clipboard`, 'success');
   } catch {
     toast('Copy failed — try manually', 'error');
@@ -314,15 +326,17 @@ on($('unlock-btn'), 'click', async () => {
 
   if (!pw) { toast('Enter your master password', 'error'); return; }
 
+  if (!Store.hasVault()) {
+    if (pw !== confirm) { toast('Passwords do not match', 'error'); return; }
+    if (pw.length < 8) { toast('Password must be at least 8 characters', 'error'); return; }
+  }
+
   spinner.style.display = 'block';
   btnTxt.style.display  = 'none';
 
   try {
     if (!Store.hasVault()) {
       // ── Creating new vault ──
-      if (pw !== confirm) { toast('Passwords do not match', 'error'); return; }
-      if (pw.length < 8)  { toast('Password must be at least 8 characters', 'error'); return; }
-
       await Store.saveVerifier(pw);
       await Store.setMaster(pw);
       pendingMasterPassword = pw;
@@ -466,6 +480,25 @@ on($('lock-vault-btn'), 'click', lockApp);
 document.addEventListener('click', e => {
   const btn = e.target.closest('.toggle-pw-btn');
   if (!btn) return;
+
+  if (btn.dataset.targetEntry) {
+    const id = btn.dataset.targetEntry;
+    const span = $('pw-' + id);
+    if (!span) return;
+
+    if (span.dataset.hidden === 'true') {
+      span.textContent   = decodeURIComponent(span.dataset.plain || '');
+      span.dataset.hidden = 'false';
+    } else {
+      span.textContent   = '••••••••';
+      span.dataset.hidden = 'true';
+    }
+
+    const icon = btn.querySelector('.eye-icon');
+    if (icon) icon.style.opacity = span.dataset.hidden === 'true' ? '1' : '0.5';
+    return;
+  }
+
   const targetId = btn.dataset.target;
   const input = $(targetId);
   if (!input) return;
@@ -555,7 +588,7 @@ function renderVault() {
       </div>
       <div class="entry-actions">
         <div class="entry-pw-field">
-          <span class="entry-pw-text" id="pw-${entry.id}" data-plain="${esc(entry.password)}" data-hidden="true">••••••••</span>
+          <span class="entry-pw-text" id="pw-${entry.id}" data-plain="${encodeURIComponent(entry.password)}" data-hidden="true">••••••••</span>
           <button class="field-btn toggle-pw-btn" data-target-entry="${entry.id}" aria-label="Toggle password">
             <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
