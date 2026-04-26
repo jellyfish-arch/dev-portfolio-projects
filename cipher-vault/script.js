@@ -314,8 +314,7 @@ function showLockStep(stepId) {
 }
 
 function initLockScreen() {
-  const hasVault    = Store.hasVault();
-  const hasRecovery = Store.hasRecovery();
+  const hasVault = Store.hasVault();
 
   if (hasVault) {
     $('lock-title-text').textContent    = 'Welcome back';
@@ -323,14 +322,12 @@ function initLockScreen() {
     $('confirm-group').style.display    = 'none';
     $('pw-strength-wrap').style.display = 'none';
     $('unlock-btn-text').textContent    = 'Unlock Vault';
-    $('forgot-link-wrap').style.display = hasRecovery ? 'block' : 'none';
   } else {
     $('lock-title-text').textContent    = 'Create your vault';
     $('lock-subtitle-text').textContent = 'Choose a strong master password. It cannot be recovered without security questions.';
     $('confirm-group').style.display    = 'flex';
     $('pw-strength-wrap').style.display = 'flex';
     $('unlock-btn-text').textContent    = 'Create Vault';
-    $('forgot-link-wrap').style.display = 'none';
   }
 
   showLockStep('step-main');
@@ -414,7 +411,10 @@ on($('skip-questions-btn'), 'click', async () => {
 /* ── FORGOT PASSWORD ────────────────────────────────────── */
 on($('forgot-btn'), 'click', () => {
   const questions = Store.getRecoveryQuestions();
-  if (!questions) { toast('No recovery data found', 'error'); return; }
+  if (!questions) {
+    toast('Recovery not set. Reset vault required.', 'error');
+    return;
+  }
 
   $('forgot-q1-label').textContent = QUESTION_LABELS[questions.q1] || 'Question 1';
   $('forgot-q2-label').textContent = QUESTION_LABELS[questions.q2] || 'Question 2';
