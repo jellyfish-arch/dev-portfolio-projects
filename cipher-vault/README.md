@@ -1,123 +1,153 @@
-# 🔐 CipherVault
+# CipherVault
 
-A **browser-based password manager and encryption toolkit** built with vanilla HTML, CSS, and JavaScript — powered by the **Web Crypto API (AES-256-GCM + PBKDF2)**.
-
-Zero servers. Zero tracking. Everything stays on your device.
-
----
-
-## ✨ Features
-
-### 🔑 Encrypted Password Vault
-- All entries encrypted with **AES-256-GCM** using your master password
-- Master password verified via a **PBKDF2-derived key** (310,000 iterations, SHA-256) — never stored in plaintext
-- Add, edit, delete, search, and filter vault entries
-- Reveal/hide individual passwords, copy to clipboard instantly
-- Category tags: Social, Work, Finance, Dev, Other
-
-### 🛡️ Password Generator
-- Cryptographically secure generation via `crypto.getRandomValues()`
-- Configurable length (8–64 chars), character sets, and ambiguous char exclusion
-- Real-time strength meter  
-
-### 🔒 Text Encryption Toolkit
-- Encrypt any plaintext string to a **Base64-encoded ciphertext**
-- Decrypt it back with the same key
-- Uses real AES-256-GCM — not fake encoding
-
-### 📊 Security Audit
-- Scans vault for weak passwords, reused passwords, and short passwords
-- Produces a security score (0–100) with an animated ring chart
-- Actionable issue cards highlighting exactly what to fix
-
-### 🎨 Premium UI
-- Dark glassmorphism design with animated gradients
-- Entry cards with category-colored avatars and strength indicators
-- Toast notification system, smooth view transitions
-- Fully responsive (mobile-friendly sidebar)
+CipherVault is a browser-based password manager and encryption toolkit built using vanilla HTML, CSS, and JavaScript.  
+It uses the Web Crypto API for secure, local encryption — your data never leaves your device.
 
 ---
 
-## ⚙️ How It Works
+## Features
 
-```
-User enters master password
-        ↓
-PBKDF2 (310,000 iterations, SHA-256) derives AES-256 key
-        ↓
-Vault data encrypted as: [salt(16B) | IV(12B) | AES-GCM ciphertext]
-        ↓
-Stored as Base64 in localStorage
-        ↓
-On unlock: same process reversed — wrong key = crypto failure
-```
+### Encrypted Vault
+- Store passwords, usernames, URLs, and notes
+- Encrypt all data using AES-256-GCM
+- Unlock vault using a master password
+- Search, filter, and manage entries
+- Show/hide passwords and copy to clipboard
+- Categorize entries (Social, Work, Finance, Dev, Other)
 
 ---
 
-## 🔤 Cryptography Glossary
-
-| Term | Meaning |
-|------|---------|
-| **AES-256-GCM** | Symmetric encryption with 256-bit key and authenticated encryption |
-| **PBKDF2** | Password-Based Key Derivation Function — converts a password into a cryptographic key |
-| **IV / Nonce** | Random value ensuring each encryption is unique |
-| **Salt** | Random bytes mixed into key derivation to defeat precomputation attacks |
-| **Web Crypto API** | Native browser cryptography — no libraries needed |
-| **localStorage** | Browser storage used as the encrypted data layer |
+### Password Generator
+- Generate secure passwords using cryptographic randomness
+- Adjustable length and character types
+- Option to exclude ambiguous characters
+- Built-in strength indicator
 
 ---
 
-## 🚀 Quick Start
+### Text Encryption Tool
+- Encrypt and decrypt custom text
+- Uses the same AES-256-GCM encryption model
+- Fully local processing
 
-Just open `index.html` in any modern browser — no installation, no server, no dependencies.
+---
 
-```bash
-# Optional: serve locally
+### Security Audit
+- Detect weak passwords
+- Detect reused passwords
+- Show vault health overview
+- Highlight issues clearly
+
+---
+
+### Recovery System
+- Optional security questions
+- Recover master password if forgotten
+- Fully local — no account or server required
+
+---
+
+### UI & Experience
+- Dark and light themes
+- Lock screen + app interface separation
+- Sidebar navigation
+- Responsive layout
+
+---
+
+## How It Works
+
+Master Password  
+↓  
+PBKDF2 Key Derivation  
+↓  
+AES-256-GCM Encryption  
+↓  
+Encrypted Vault stored in browser  
+
+---
+
+## Tech Stack
+
+- HTML5  
+- CSS3  
+- Vanilla JavaScript  
+- Web Crypto API  
+
+---
+
+## Project Structure
+
+ciphervault/  
+├── index.html  
+├── style.css  
+├── script.js  
+└── README.md  
+
+---
+
+## Running the Project
+
+Open `index.html` in a modern browser.
+
+Optional local server:
+
 npx serve .
-# then open http://localhost:3000
-```
-
-> Works in Chrome, Firefox, Edge, Safari (any browser with Web Crypto API support)
 
 ---
 
-## 📁 Project Structure
+## Browser Support
 
-```
-cipher-vault/
-├── index.html   # Full app structure + lock screen + modal
-├── style.css    # Premium dark theme, glassmorphism, responsive
-├── script.js    # Crypto engine, vault store, UI logic
-└── README.md
-```
+Works in modern browsers that support the Web Crypto API:
+- Chrome  
+- Edge  
+- Firefox  
+- Safari  
 
 ---
 
-## 🧠 Technical Highlights
+## Security Notes
 
-- **Real cryptography** — not Base64 or XOR, actual AES-256-GCM via the browser's native `crypto.subtle` API
-- **Zero dependencies** — pure vanilla HTML/CSS/JS, no frameworks or libraries
-- **Secure key derivation** — 310,000 PBKDF2 iterations (OWASP recommendation for SHA-256)
-- **Authenticated encryption** — GCM mode detects tampering (wrong key = decryption fails gracefully)
-- **Random UUID** — each entry uses `crypto.randomUUID()` for unique, collision-free IDs
-- **Keyboard shortcuts** — `Ctrl+K` search, `Ctrl+N` add entry, `Esc` close modal
+- All encryption is done locally in the browser  
+- No backend or external API is used  
+- Data is stored in encrypted form  
+- If the master password is lost and recovery is not set, the vault cannot be accessed  
 
 ---
 
-## 🎯 Purpose
+## Limitations
 
-Built to demonstrate applied knowledge of:
-- Browser-native **Web Crypto API**
-- Real-world **security engineering** concepts
-- **Local-first architecture** (offline, private by design)
-- Premium **UI/UX engineering** with vanilla CSS
-
----
-
-## 👨‍💻 Author
-
-Jelly Fish — [GitHub](https://github.com/jellyfish-arch)
+- Uses localStorage for storage  
+- Recovery system depends on security questions  
+- No export/import functionality  
+- No auto-lock timeout  
 
 ---
 
-> *"Security should be invisible by default, powerful under the hood."*
+## Future Improvements
+
+- Switch to IndexedDB  
+- Add secure recovery key system  
+- Add vault backup/export  
+- Implement auto-lock timer  
+- Improve UI with cards and dashboard  
+- Modularize code structure  
+
+---
+
+## Purpose
+
+CipherVault is a learning-focused project demonstrating:
+- Browser-based cryptography  
+- Local-first architecture  
+- Secure UI/UX design  
+
+---
+
+## Author
+
+Built as a learning and experimental project.
+
+---
+
+Secure. Local. Simple.
