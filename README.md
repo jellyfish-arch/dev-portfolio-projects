@@ -10,7 +10,7 @@ A collection of polished, real-world projects built to demonstrate applied engin
 |---------|-------------|------------|
 | [🧠 DevTrack AI](./dev-track-ai/) | Developer growth intelligence system — GitHub profile analysis, AI-powered feedback, career roadmaps | HTML, CSS, JavaScript |
 | [⚙️ NexusFlow](./nexus-task-orchestrator/) | High-performance async task orchestration engine with retry logic, state persistence & observer pattern | Python, asyncio, pytest |
-| [🔐 CipherVault](./cipher-vault/) | Browser-based password manager & encryption toolkit using AES-256-GCM + PBKDF2 via Web Crypto API | HTML, CSS, JavaScript |
+| [🔐 CipherVault](./cipher-vault/) | Browser-based password manager & encryption toolkit with lock screen and recovery system using AES-256-GCM + PBKDF2 via Web Crypto API | HTML, CSS, JavaScript |
 | [🧪 Polyglot Experiment](./polyglot-experiment/) | Cross-language experiment solving the same problems in Python, Java, and JavaScript | Python, Java, HTML/JS |
 
 ---
