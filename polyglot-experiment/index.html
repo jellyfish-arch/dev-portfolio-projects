@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +13,11 @@
             text-align: center;
             padding: 40px;
         }
-        h1 { color: #f38ba8; }
+
+        h1 {
+            color: #f38ba8;
+        }
+
         .card {
             background: #313244;
             border-radius: 12px;
@@ -20,10 +25,20 @@
             margin: 20px auto;
             max-width: 500px;
         }
-        .lang { color: #89dceb; font-size: 1.2em; font-weight: bold; }
-        .result { color: #a6e3a1; margin-top: 10px; }
+
+        .lang {
+            color: #89dceb;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .result {
+            color: #a6e3a1;
+            margin-top: 10px;
+        }
     </style>
 </head>
+
 <body>
     <h1> My Polyglot Experiment </h1>
     <p> Same logic, different languages! </p>
@@ -44,7 +59,7 @@
     </div>
 
     <script>
-        // JavaScript Experiment - Palindrome Checker
+        // JavaScript Experiment - Palindrome Checker - used this in Polyglot Experiment section. 
         function isPalindrome(str) {
             const reversed = str.split("").reverse().join("");
             return str === reversed;
@@ -52,8 +67,9 @@
 
         const word = "racecar";
         const result = isPalindrome(word);
-        document.getElementById("js-result").innerText = 
+        document.getElementById("js-result").innerText =
             `Palindrome Check: "${word}" is ${result ? "a Palindrome!" : "not a Palindrome!"}`;
     </script>
 </body>
+
 </html>
