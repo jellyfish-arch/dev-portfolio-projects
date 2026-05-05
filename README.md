@@ -24,3 +24,7 @@ To build and showcase real-world projects that demonstrate applied engineering s
 ## 👨‍💻 Author
 
 Jelly Fish — [GitHub](https://github.com/jellyfish-arch)
+
+---
+
+*🚀 Maintained by Jelly Fish | Last Updated: May 2026*
