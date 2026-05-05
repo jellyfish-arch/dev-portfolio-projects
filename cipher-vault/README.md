@@ -151,3 +151,7 @@ Built as a learning and experimental project.
 ---
 
 Secure. Local. Simple.
+
+---
+
+*🚀 Maintained by Jelly Fish | Last Updated: May 2026*
