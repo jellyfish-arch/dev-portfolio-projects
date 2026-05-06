@@ -166,3 +166,7 @@ A detailed view showing how the final score was calculated.
 
 ### Career Roadmap
 A suggested learning path based on the user's selected career goal.
+
+---
+
+*🚀 Maintained by Jelly Fish | Last Updated: May 2026*
