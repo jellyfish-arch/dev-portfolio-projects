@@ -20,3 +20,7 @@ A beginner experiment exploring how different programming languages solve simple
 ## 👨‍💻 Author
 
 Jelly Fish — [GitHub](https://github.com/jellyfish-arch)
+
+---
+
+*🚀 Maintained by Jelly Fish | Last Updated: May 2026*
