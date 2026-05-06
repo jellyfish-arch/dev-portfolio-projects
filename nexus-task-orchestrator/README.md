@@ -35,3 +35,7 @@ nexus-task-orchestrator/
 ├── demo.py              # System demonstration
 └── requirements.txt
 ```
+
+---
+
+*🚀 Maintained by Jelly Fish | Last Updated: May 2026*
