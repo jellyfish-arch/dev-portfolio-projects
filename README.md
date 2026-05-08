@@ -12,6 +12,7 @@ A collection of polished, real-world projects built to demonstrate applied engin
 | [⚙️ NexusFlow](./nexus-task-orchestrator/) | High-performance async task orchestration engine with retry logic, state persistence & observer pattern | Python, asyncio, pytest |
 | [🔐 CipherVault](./cipher-vault/) | Browser-based password manager & encryption toolkit with lock screen and recovery system using AES-256-GCM + PBKDF2 via Web Crypto API | HTML, CSS, JavaScript |
 | [🧪 Polyglot Experiment](./polyglot-experiment/) | Cross-language experiment solving the same problems in Python, Java, and JavaScript | Python, Java, HTML/JS |
+| [🌐 Portfolio](./portfolio/) | Premium developer portfolio webpage with dark theme, glassmorphism, scroll animations, and responsive design | HTML, CSS, JavaScript |
 
 ---
 
