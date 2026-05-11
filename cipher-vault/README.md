@@ -18,10 +18,10 @@ It uses the Web Crypto API for secure, local encryption — your data never leav
 ---
 
 ### Password Generator
-- Generate secure passwords using cryptographic randomness
-- Adjustable length and character types
-- Option to exclude ambiguous characters
-- Built-in strength indicator
+- Generate secure passwords using cryptographic randomness,
+- Adjustable length and character types,
+- Option to exclude ambiguous characters,
+- Built-in strength indicator.
 
 ---
 
